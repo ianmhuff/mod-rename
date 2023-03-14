@@ -1,8 +1,12 @@
 import os
+import shutil
 
+#TODO:
+#Add support for effect and voice folders
+#Fix: crashes if you attempt to rename files to a slot that already exists in the same folder
 
 def printHelp():
-    print("SSBU Mod File Renamer v.1.0 by Ian Huff")
+    print("SSBU Mod File Renamer v.1.1 by Ian Huff")
     print("Place the executable in the root of your SD card if it is not already.")
     print("This tool is intended to make the process of renaming files to change the skin slot that a mod replaces easier.")
     print("This tool can NOT make a mod work on a slot that it is otherwise incompatible with, i.e. moving a c00 Wario mod to c01.")
@@ -14,7 +18,7 @@ def printHelp():
 
 ###data
 
-#list of all fighter and boss codenames
+#list of ALL fighter and boss codenames (INCLUDING DLC)
 codeNames = ["mario", "donkey", "link", "samus", "samusd", "yoshi", "kirby", "fox", "pikachu", "luigi", "ness", "captain", "purin", "peach", "daisy", "koopa", "koopag", "ice_climber", "nana", "popo", "sheik", "zelda", "mariod", "pichu", "falco", "marth", "lucina", "younglink", "ganon", "mewtwo", "roy", "chrom", "gamewatch", "metaknight", "pit", "pitb", "szerosuit", "wario", "snake", "ike", "ptrainer", "pzenigame", "pfushigisou", "plizardon", "diddy", "lucas", "sonic", "dedede", "pikmin", "lucario", "robot", "toonlink", "wolf", "murabito", "rockman", "wiifit", "rosetta", "littlemac", "gekkouga", "miifighter", "miiswordsman", "miigunner", "palutena", "pacman", "reflet", "shulk", "koopajr", "duckhunt", "ryu", "ken", "cloud", "kamui", "bayonetta", "inkling", "ridley", "simon", "richter", "krool", "shizue", "gaogaen", "packun", "jack", "brave", "buddy", "dolly", "master", "tantan", "pickel", "edge", "eflame", "elight", "element", "demon", "trail", "crazyhand", "darz", "dracula", "dracula2", "galleom", "ganonboss", "kiila", "kiila_darz", "koopag", "lioleus", "marx", "mastercrazy", "masterhand"]
 
 #list of DLC character code names
@@ -69,7 +73,7 @@ while True:
         exit()
 
     #new slotID input
-    print("Enter the slot to rename files to (0-7, or \"exit\" to cancel and exit)")
+    print("Enter the slot to rename files to (0-7, or \"delete\" to delete the files, or \"exit\" to cancel and exit)")
     slotTo = input()
     if slotTo == "exit":
         print("Exiting...")
@@ -99,8 +103,12 @@ while True:
             fileExists = os.path.exists(oldFileName) #check if the folder oldFileName exists
     
             if fileExists:
-                print("Renaming " + oldFileName + " ...") #print a success message
-                os.rename(oldFileName, newFileName) #rename it
+                if slotTo == "delete":
+                    print("Deleting " + oldFileName + " ...") #print a success message
+                    shutil.rmtree(oldFileName) #delete it
+                else:
+                    print("Renaming " + oldFileName + " ...") #print a success message
+                    os.rename(oldFileName, newFileName) #rename it
             else:
                 print("Failed to locate " + oldFileName) #print a failure message
                 
@@ -123,8 +131,12 @@ while True:
         fileExists = os.path.exists(oldFileName) #check if the file oldFileName exists
         
         if fileExists:
-            print("Renaming " + oldFileName + " ...") #print a success message
-            os.rename(oldFileName, newFileName) #rename it
+            if slotTo == "delete":
+                print("Deleting " + oldFileName + " ...") #print a success message
+                os.remove(oldFileName) #rename it
+            else:
+                print("Renaming " + oldFileName + " ...") #print a success message
+                os.rename(oldFileName, newFileName) #delete it
         else:
             print("Failed to locate " + oldFileName) #print a failure message
             
